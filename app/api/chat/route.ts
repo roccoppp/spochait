@@ -4,8 +4,8 @@ import { processQuery } from '@/lib/agent/Agent';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
-// Allow streaming responses up to 30 seconds
-export const maxDuration = 30;
+// Allow streaming responses up to 60 seconds
+export const maxDuration = 60;
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 

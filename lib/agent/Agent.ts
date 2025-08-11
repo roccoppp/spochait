@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { ModelMessage, streamText } from 'ai';
+import { ModelMessage, streamText, stepCountIs } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { listPlaylists } from './tools/listPlaylists';
 import { modifyPlaylist } from './tools/modifyPlaylist';
@@ -31,44 +31,21 @@ export async function processQuery(
   messages: ModelMessage[],
   getAccessToken: () => Promise<string | undefined> | string | undefined = () => undefined,
 ) {
-
   const tools = {
     listPlaylists: listPlaylists(getAccessToken),
     modifyPlaylist: modifyPlaylist(getAccessToken),
     searchTracks: searchTracks(getAccessToken),
   } as const;
 
-  const first = streamText({
+  // Stream immediately; avoid awaiting intermediate results to prevent route timeouts
+  return streamText({
     model: openai('gpt-4o'),
     system:
       'you are a helpful assistant that manages spotify playlists, your purpose is to help the user manage their playlists. decide if you need to use the tools to get more information to modify the playlist(e.g Playlist ID or track IDs) or if you can do it with the information you have. your response will be passed to another llm call if you only return toolcalls',
     messages,
     tools,
+    // Enable multi-step tool calls and follow-up assistant text in a single stream
+    stopWhen: stepCountIs(5),
   });
-
-  // Determine if the first call produced any assistant text
-  const firstResponse = await first.response;
-  const firstText = await first.text;
-
-  if (firstText && firstText.trim().length > 0) {
-    // First call yielded text; return it directly
-    return first;
-  }
-
-  // No assistant text (only tool calls). Chain a second call with full history incl. tools
-  const secondMessages: ModelMessage[] = [
-    ...messages,
-    ...firstResponse.messages,
-  ];
-
-  const second = streamText({
-    model: openai('gpt-4o'),
-    system:
-      'you are a helpful assistant that manages spotify playlists, your purpose is to help the user manage their playlists. decide if you need to use the tools to get more information to modify the playlist(e.g Playlist ID or track IDs) or if you can do it with the information you have.',
-    messages: secondMessages,
-    tools,
-  });
-
-  return second;
 }
 
