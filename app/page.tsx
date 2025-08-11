@@ -15,8 +15,9 @@ export default function SpotichatPage() {
     e.preventDefault();
     const trimmed = input.trim();
     if (!trimmed) return;
-    await sendMessage({ text: trimmed });
     setInput("");
+    await sendMessage({ text: trimmed });
+    
   };
 
   return (
