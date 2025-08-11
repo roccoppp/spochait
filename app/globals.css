@@ -1,21 +1,31 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Spotify-like palette */
+  --background: #121212; /* app background */
+  --panel: #181818;      /* surfaces */
+  --muted: #b3b3b3;      /* secondary text */
+  --foreground: #e5e5e5; /* primary text */
+  --accent: #1db954;     /* Spotify green */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-panel: var(--panel);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #121212;
+    --panel: #181818;
+    --muted: #b3b3b3;
     --foreground: #ededed;
+    --accent: #1db954;
   }
 }
 
@@ -23,4 +33,25 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Utility classes for buttons and surfaces matching Spotify look */
+.btn {
+  @apply inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium transition-colors;
+}
+.btn-accent {
+  background: var(--accent);
+  color: #000;
+}
+.btn-accent:hover {
+  filter: brightness(1.1);
+}
+.surface {
+  background: var(--panel);
+}
+.surface-muted {
+  background: #0f0f0f;
+}
+.input {
+  @apply w-full rounded-full px-4 py-2 bg-[#222] text-[var(--foreground)] placeholder-[var(--muted)] outline-none border border-transparent focus:border-[var(--accent)];
 }
