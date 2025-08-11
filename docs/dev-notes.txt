@@ -1,0 +1,80 @@
+Spotifront developer notes — pass ESLint and Vercel build consistently
+
+Project quick facts
+- Framework: Next.js 15 (App Router under `app/`), React 19, TypeScript 5
+- Linting: ESLint 9 with `next/core-web-vitals` and `next/typescript`
+- TS config: `strict: true`, `isolatedModules: true`, `moduleResolution: "bundler"`, path alias `@/* -> project root`
+- Build: `next build` (CI blocks on ESLint/type errors). Local lint: `npm run lint`
+
+Common causes of failed deploys seen here
+- Rule: `@typescript-eslint/no-explicit-any` (Error)
+- Rule: `@typescript-eslint/no-unused-vars` (Warning locally, still surfaces in CI)
+
+TypeScript rules to follow
+1) Do not use `any`.
+   - Prefer precise types or `unknown` plus a type guard/refinement.
+   - Example (route body):
+     ```ts
+     // Good
+     import type { UIMessage } from 'ai';
+     const { messages }: { messages: UIMessage[] } = await req.json();
+     ```
+   - Avoid: `const { messages }: any = await req.json();`
+
+2) Avoid unused variables and imports.
+   - Remove unused symbols rather than keeping them.
+   - If stubbing, use `_` only when the symbol is actually referenced. Otherwise delete it.
+   - As a last resort, disable narrowly:
+     ```ts
+     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     const _unused = 0;
+     ```
+
+3) Keep exported API and function types explicit when they are part of the public/server boundary.
+   - Route handlers should return a `Response` (or Next Response) and have typed inputs.
+
+Next.js + AI SDK patterns for this repo
+- Use the AI SDK model message types and helpers; pass `ModelMessage[]` to `streamText`.
+- Convert UI messages to model messages on the route using `convertToModelMessages`.
+- Keep tools typed with zod schemas and safe return shapes.
+- See `docs/aisdk.txt` for canonical usage and message formats [[memory:5489427]].
+
+Imports and paths
+- Use the `@/*` alias for absolute imports from project root.
+- Do not assume a `/src` directory (there isn’t one).
+
+Runtime and server code
+- Server-only agent logic lives in `lib/agent/`. Keep secrets and server calls on the server.
+- Route handlers (`app/api/**/route.ts`) run on server; type `Request` inputs and the JSON payloads.
+
+Safe patterns to prefer
+- Replace `any` with a strong type from the library, a specific interface, or `unknown` with a refinement step.
+- Use zod schemas (already used in tools) to validate inputs.
+- Narrow token/session types instead of casting broadly.
+  ```ts
+  // Good: narrow shape you actually need
+  type SessionWithToken = { accessToken?: string };
+  const token = (session as SessionWithToken | null)?.accessToken;
+  ```
+
+Local verify before pushing
+1) `npm run lint` — must be clean (no `any`, no unused vars/imports)
+2) `npm run build` — Next.js production build
+
+Notes specific to current codebase
+- `app/api/chat/route.ts`: Keep `messages` typed as `UIMessage[]`. Do not introduce `any`.
+- `lib/agent/Agent.ts`: Remove unused constants/imports (e.g., unused prompts) or use them.
+- `lib/auth.ts`: Avoid `any` for token shapes. Prefer `Record<string, unknown>` or specific interfaces and then refine.
+
+When disabling a rule is acceptable
+- Only for the smallest possible scope, with a short justification comment and after attempting strong typing/removing unused code. Never disable across a whole file unless absolutely necessary.
+
+CI/build quirks
+- Next build runs ESLint and type checks; errors will fail the Vercel build.
+- Treat `no-explicit-any` as a hard error; do not merge code with `any`.
+
+References
+- Next.js ESLint config: `next/core-web-vitals`, `next/typescript`
+- AI SDK usage and message typing: `docs/aisdk.txt` [[memory:5489427]]
+
+

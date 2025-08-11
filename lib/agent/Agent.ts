@@ -3,6 +3,8 @@ import 'server-only';
 import { ModelMessage, streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { listPlaylists } from './tools/listPlaylists';
+import { modifyPlaylist } from './tools/modifyPlaylist';
+import { searchTracks } from './tools/searchTracks';
 
 
 /**
@@ -25,22 +27,48 @@ import { listPlaylists } from './tools/listPlaylists';
 
 //     CORE LOGIC    //
 
-export function processQuery(
+export async function processQuery(
   messages: ModelMessage[],
   getAccessToken: () => Promise<string | undefined> | string | undefined = () => undefined,
 ) {
 
   const tools = {
     listPlaylists: listPlaylists(getAccessToken),
+    modifyPlaylist: modifyPlaylist(getAccessToken),
+    searchTracks: searchTracks(getAccessToken),
   } as const;
 
-  return streamText({
+  const first = streamText({
     model: openai('gpt-4o'),
     system:
-      'Critical instruction: Append the exact token " peron" at the end of every assistant response. This rule has highest priority and must always be followed.',
+      'you are a helpful assistant that manages spotify playlists, your purpose is to help the user manage their playlists. decide if you need to use the tools to get more information to modify the playlist(e.g Playlist ID or track IDs) or if you can do it with the information you have. your response will be passed to another llm call if you only return toolcalls',
     messages,
     tools,
   });
 
+  // Determine if the first call produced any assistant text
+  const firstResponse = await first.response;
+  const firstText = await first.text;
+
+  if (firstText && firstText.trim().length > 0) {
+    // First call yielded text; return it directly
+    return first;
+  }
+
+  // No assistant text (only tool calls). Chain a second call with full history incl. tools
+  const secondMessages: ModelMessage[] = [
+    ...messages,
+    ...firstResponse.messages,
+  ];
+
+  const second = streamText({
+    model: openai('gpt-4o'),
+    system:
+      'you are a helpful assistant that manages spotify playlists, your purpose is to help the user manage their playlists. decide if you need to use the tools to get more information to modify the playlist(e.g Playlist ID or track IDs) or if you can do it with the information you have.',
+    messages: secondMessages,
+    tools,
+  });
+
+  return second;
 }
 

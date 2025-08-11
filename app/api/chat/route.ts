@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     const s = session as unknown as { accessToken?: string } | null;
     return s?.accessToken;
   };
-  const result = processQuery(convertToModelMessages(messages), getAccessToken);
+  const result = await processQuery(convertToModelMessages(messages), getAccessToken);
 
   // Return in UIMessage stream format for useChat
   return result.toUIMessageStreamResponse();
