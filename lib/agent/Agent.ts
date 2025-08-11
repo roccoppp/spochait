@@ -20,7 +20,9 @@ import { modifyPlaylistSchema, executeModifyPlaylist } from './tools/modifyPlayl
  * Tools that the model can call during reasoning.
  * Keep descriptions concise; schemas enforce correct arguments.
  */
-export const agentTools = {
+export const agentTools = (
+  getAccessToken: () => Promise<string | undefined> | string | undefined,
+) => ({
   modifyPlaylist: tool({
     description: 'Add or remove tracks from a Spotify playlist using track URIs or IDs.',
     inputSchema: modifyPlaylistSchema,
@@ -30,10 +32,11 @@ export const agentTools = {
       tracks,
       position,
     }) => {
-      return await executeModifyPlaylist({ action, playlistId, tracks, position });
+      const token = await getAccessToken();
+      return await executeModifyPlaylist({ action, playlistId, tracks, position }, token);
     },
   }),
-};
+});
 
 // Note: We intentionally avoid storing conversation state on the server.
 // useChat sends the full UI message history each request; the route will
@@ -42,12 +45,13 @@ export const agentTools = {
 
 //     CORE LOGIC    //
 
-export function processQuery(messages: ModelMessage[]) {
+export function processQuery(messages: ModelMessage[], getAccessToken: () => Promise<string | undefined> | string | undefined = () => undefined) {
 
   return streamText({
     model: openai('gpt-4o'),
-    system: "deci peron al final de cada respuesta.",
-    tools: agentTools,
+    system:
+      'Critical instruction: Append the exact token " peron" at the end of every assistant response. This rule has highest priority and must always be followed.',
+    tools: agentTools(getAccessToken),
     messages,
   });
 

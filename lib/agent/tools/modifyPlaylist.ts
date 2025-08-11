@@ -18,20 +18,23 @@ export const modifyPlaylistSchema = z.object({
 export type ModifyPlaylistParams = z.infer<typeof modifyPlaylistSchema>;
 
 // Tool execution function
-export async function executeModifyPlaylist(params: ModifyPlaylistParams) {
+export async function executeModifyPlaylist(
+  params: ModifyPlaylistParams,
+  accessToken?: string,
+) {
   const { action, playlistId, tracks, position } = params;
   
   try {
     // Check if access token is configured
-    if (!process.env.SPOTIFY_ACCESS_TOKEN) {
+    if (!accessToken) {
       return {
         success: false,
-        message: 'Spotify access token not configured. Please set SPOTIFY_ACCESS_TOKEN environment variable.',
+        message: 'Spotify access token not available. Please authenticate with Spotify.',
       };
     }
 
     // Set the access token for this request
-    spotify.setAccessToken(process.env.SPOTIFY_ACCESS_TOKEN);
+    spotify.setAccessToken(accessToken);
 
     // Normalize track URIs
     const trackUris = tracks.map((track: string) => {

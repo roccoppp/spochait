@@ -1,9 +1,11 @@
 "use client";
 import { useState } from "react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 
 export default function SpotichatPage() {
+  const { data: session, status: authStatus } = useSession();
   const [input, setInput] = useState("");
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({ api: "/api/chat" }),
@@ -27,7 +29,19 @@ export default function SpotichatPage() {
             <span className="text-lg font-semibold">Spotichat</span>
           </div>
           <div className="flex items-center gap-3">
-            <button className="btn btn-accent">Connect Spotify</button>
+            {authStatus === "authenticated" ? (
+              <>
+                <span className="text-sm text-[var(--muted)]">{session?.user?.email}</span>
+                <button className="btn" onClick={() => signOut()}>Sign out</button>
+              </>
+            ) : (
+              <button
+                className="btn btn-accent"
+                onClick={() => signIn("spotify")}
+              >
+                Connect Spotify
+              </button>
+            )}
           </div>
         </div>
       </header>
