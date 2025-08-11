@@ -1,6 +1,6 @@
 import 'server-only';
 
-import { ModelMessage, streamText, tool} from 'ai';
+import { ModelMessage, streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { listPlaylists } from './tools/listPlaylists';
 

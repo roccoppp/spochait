@@ -43,9 +43,9 @@ export function listPlaylists(getAccessToken: GetAccessToken) {
       spotifyApi.setAccessToken(token);
 
       const response = await spotifyApi.getUserPlaylists({ limit, offset });
-      const items = response.body?.items ?? [];
+      const items = (response.body?.items ?? []) as SpotifyApi.PlaylistObjectSimplified[];
 
-      return items.map((p: any) => ({ id: p?.id, name: p?.name }));
+      return items.map((p) => ({ id: p.id, name: p.name }));
     },
   });
 }
