@@ -41,7 +41,7 @@ async function refreshAccessToken(token: Record<string, unknown>) {
       refreshToken: (refreshed.refresh_token as string | undefined) ?? token.refreshToken,
       error: undefined,
     } as Record<string, unknown>;
-  } catch (_error) {
+  } catch {
     return {
       ...token,
       error: 'RefreshAccessTokenError',
@@ -81,9 +81,15 @@ export const authOptions: NextAuthOptions = {
       return refreshAccessToken(token as Record<string, unknown>);
     },
     async session({ session, token }) {
-      (session as any).accessToken = token.accessToken;
-      (session as any).refreshToken = token.refreshToken;
-      (session as any).expiresAt = token.expiresAt;
+      type MutableSession = typeof session & {
+        accessToken?: string;
+        refreshToken?: string;
+        expiresAt?: number;
+      };
+      const mutable = session as MutableSession;
+      if (typeof token.accessToken === 'string') mutable.accessToken = token.accessToken;
+      if (typeof token.refreshToken === 'string') mutable.refreshToken = token.refreshToken;
+      if (typeof token.expiresAt === 'number') mutable.expiresAt = token.expiresAt;
       return session;
     },
   },

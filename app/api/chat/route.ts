@@ -14,7 +14,10 @@ export async function POST(req: Request) {
 
   // Use centralized agent config (model, system, tools)
   const session = await getServerSession(authOptions);
-  const getAccessToken = () => (session as any)?.accessToken as string | undefined;
+  const getAccessToken = () => {
+    const s = session as unknown as { accessToken?: string } | null;
+    return s?.accessToken;
+  };
   const result = processQuery(convertToModelMessages(messages), getAccessToken);
 
   // Return in UIMessage stream format for useChat

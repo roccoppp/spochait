@@ -2,7 +2,6 @@ import 'server-only';
 
 import { ModelMessage, streamText, tool} from 'ai';
 import { openai } from '@ai-sdk/openai';
-import { COMMON_PROMPTS } from './Prompts';
 import { modifyPlaylistSchema, executeModifyPlaylist } from './tools/modifyPlaylist';
 
 /**
