@@ -16,6 +16,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Spotichat",
   description: "Chat with a Spotify-inspired UI",
+  icons: {
+    icon: "/spotify-logo.svg",
+  },
 };
 
 export default function RootLayout({

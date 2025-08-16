@@ -90,6 +90,30 @@ export const authOptions: NextAuthOptions = {
       if (typeof token.accessToken === 'string') mutable.accessToken = token.accessToken;
       if (typeof token.refreshToken === 'string') mutable.refreshToken = token.refreshToken;
       if (typeof token.expiresAt === 'number') mutable.expiresAt = token.expiresAt;
+      
+      // Fetch Spotify user profile if we have an access token
+      if (token.accessToken) {
+        try {
+          const response = await fetch('https://api.spotify.com/v1/me', {
+            headers: {
+              Authorization: `Bearer ${token.accessToken}`,
+            },
+          });
+          
+          if (response.ok) {
+            const profile = await response.json();
+            mutable.user = {
+              ...mutable.user,
+              name: profile.display_name || profile.id,
+              image: profile.images?.[0]?.url || mutable.user?.image,
+              email: mutable.user?.email,
+            };
+          }
+        } catch (error) {
+          console.error('Failed to fetch Spotify profile:', error);
+        }
+      }
+      
       return session;
     },
   },

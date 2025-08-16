@@ -15,11 +15,11 @@ export default function LandingPage() {
               <div className="relative inline-block">
                 <div className="surface-card w-32 h-32 md:w-40 md:h-40 mx-auto flex items-center justify-center mb-6">
                   <Image
-                    src="/favicon.ico"
+                    src="/spotify-logo.svg"
                     alt="Spotichat Logo"
                     width={80}
                     height={80}
-                    className="rounded-xl"
+                    className="w-20 h-20"
                   />
                 </div>
               </div>

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
+import Image from "next/image";
 import LandingPage from "./components/LandingPage";
 
 export default function SpotichatPage() {
@@ -68,13 +69,30 @@ export default function SpotichatPage() {
         <div className="container-app">
           <div className="h-16 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full shadow-lg" style={{ backgroundColor: 'var(--accent)', boxShadow: `0 0 0 2px var(--accent)`, opacity: '0.2' }} />
+              <Image
+                src="/spotify-logo.svg"
+                alt="Spotichat Logo"
+                width={32}
+                height={32}
+                className="w-8 h-8"
+              />
               <span className="heading-lg" style={{ color: 'var(--content)' }}>Spotichat</span>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-sm hidden md:block" style={{ color: 'var(--content-muted)' }}>
-                {session?.user?.email}
-              </span>
+              <div className="flex items-center gap-3">
+                {session?.user?.image && (
+                  <Image
+                    src={session.user.image}
+                    alt="Profile Picture"
+                    width={32}
+                    height={32}
+                    className="w-8 h-8 rounded-full"
+                  />
+                )}
+                <span className="text-sm hidden md:block" style={{ color: 'var(--content-muted)' }}>
+                  {session?.user?.name || session?.user?.email}
+                </span>
+              </div>
               <button 
                 className="btn btn-secondary"
                 onClick={() => signOut()}
