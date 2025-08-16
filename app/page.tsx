@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
@@ -7,9 +7,29 @@ import { DefaultChatTransport } from "ai";
 export default function SpotichatPage() {
   const { data: session, status: authStatus } = useSession();
   const [input, setInput] = useState("");
-  const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
+  const sessionIdRef = useRef<string>("");
+  
+  // Generate a new session ID on each page load
+  useEffect(() => {
+    sessionIdRef.current = crypto.randomUUID();
+  }, []);
+
+  const { messages, sendMessage, status, setMessages } = useChat({
+    transport: new DefaultChatTransport({ 
+      api: "/api/chat",
+      prepareSendMessagesRequest: ({ messages }) => ({
+        body: { 
+          messages, 
+          sessionId: sessionIdRef.current 
+        }
+      })
+    }),
   });
+
+  // Clear messages on component mount to ensure fresh session
+  useEffect(() => {
+    setMessages([]);
+  }, [setMessages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

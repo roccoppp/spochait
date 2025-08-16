@@ -30,6 +30,7 @@ import { searchTracks } from './tools/searchTracks';
 export async function processQuery(
   messages: ModelMessage[],
   getAccessToken: () => Promise<string | undefined> | string | undefined = () => undefined,
+  sessionId?: string,
 ) {
   const tools = {
     listPlaylists: listPlaylists(getAccessToken),

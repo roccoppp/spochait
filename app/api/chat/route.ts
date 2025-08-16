@@ -10,7 +10,7 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  const { messages, sessionId }: { messages: UIMessage[]; sessionId?: string } = await req.json();
 
   // Use centralized agent config (model, system, tools)
   const session = await getServerSession(authOptions);
@@ -18,7 +18,13 @@ export async function POST(req: Request) {
     const s = session as unknown as { accessToken?: string } | null;
     return s?.accessToken;
   };
-  const result = await processQuery(convertToModelMessages(messages), getAccessToken);
+  
+  // Convert messages and handle session refresh
+  const modelMessages = convertToModelMessages(messages);
+  
+  // If this is a fresh session with sessionId, we can ensure clean state
+  // The model will only see the current conversation messages
+  const result = await processQuery(modelMessages, getAccessToken, sessionId);
 
   // Return in UIMessage stream format for useChat
   return result.toUIMessageStreamResponse();
