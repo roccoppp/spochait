@@ -70,7 +70,7 @@ export default function SpotichatPage() {
           <div className="h-16 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Image
-                src="/spotify-logo.svg"
+                src="/favicon.ico"
                 alt="Spotichat Logo"
                 width={32}
                 height={32}
@@ -80,14 +80,21 @@ export default function SpotichatPage() {
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3">
-                {session?.user?.image && (
+                {session?.user?.image ? (
                   <Image
                     src={session.user.image}
                     alt="Profile Picture"
                     width={32}
                     height={32}
-                    className="w-8 h-8 rounded-full"
+                    className="w-8 h-8 rounded-full object-cover"
+                    unoptimized={true}
                   />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                    <span className="text-white text-sm font-semibold">
+                      {(session?.user?.name || session?.user?.email || 'U')[0].toUpperCase()}
+                    </span>
+                  </div>
                 )}
                 <span className="text-sm hidden md:block" style={{ color: 'var(--content-muted)' }}>
                   {session?.user?.name || session?.user?.email}

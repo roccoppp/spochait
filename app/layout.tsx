@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "Spotichat",
   description: "Chat with a Spotify-inspired UI",
   icons: {
-    icon: "/spotify-logo.svg",
+    icon: "/favicon.ico",
   },
 };
 
