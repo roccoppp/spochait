@@ -1,57 +1,216 @@
 @import "tailwindcss";
 
 :root {
-  /* Spotify-like palette */
-  --background: #121212; /* app background */
-  --panel: #181818;      /* surfaces */
-  --muted: #b3b3b3;      /* secondary text */
-  --foreground: #e5e5e5; /* primary text */
-  --accent: #1db954;     /* Spotify green */
+  /* Brand Color Scale - Spotify Green Hue Family */
+  --brand-50: #ecfdf5;
+  --brand-100: #d1fae5;
+  --brand-200: #a7f3d0;
+  --brand-300: #6ee7b7;
+  --brand-400: #34d399;
+  --brand-500: #1db954; /* Primary Spotify green */
+  --brand-600: #059669;
+  --brand-700: #047857;
+  --brand-800: #065f46;
+  --brand-900: #064e3b;
+  --brand-950: #022c22;
+
+  /* Semantic Color Tokens */
+  --bg: #0a0a0a;           /* Main background */
+  --surface: #121212;      /* Card/panel surfaces */
+  --surface-hover: #1a1a1a; /* Hover states */
+  --content: #ffffff;      /* Primary text */
+  --content-muted: #a1a1aa; /* Secondary text */
+  --accent: var(--brand-500); /* Interactive elements */
+  --border: #262626;       /* Subtle borders */
+  --ring: #404040;         /* Focus rings */
+
+  /* Neutral Scale for balanced contrast */
+  --neutral-50: #fafafa;
+  --neutral-100: #f5f5f5;
+  --neutral-200: #e5e5e5;
+  --neutral-300: #d4d4d4;
+  --neutral-400: #a3a3a3;
+  --neutral-500: #737373;
+  --neutral-600: #525252;
+  --neutral-700: #404040;
+  --neutral-800: #262626;
+  --neutral-900: #171717;
+  --neutral-950: #0a0a0a;
+}
+
+.dark {
+  /* Dark mode adjustments - deeper tones */
+  --bg: #000000;
+  --surface: #0f0f0f;
+  --surface-hover: #171717;
+  --content: #fafafa;
+  --content-muted: #94a3b8;
+  --accent: #22c55e; /* Slightly brighter green for dark mode */
+  --border: #1f1f1f;
+  --ring: #374151;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-panel: var(--panel);
-  --color-muted: var(--muted);
+  /* Brand Scale */
+  --color-brand-50: var(--brand-50);
+  --color-brand-100: var(--brand-100);
+  --color-brand-200: var(--brand-200);
+  --color-brand-300: var(--brand-300);
+  --color-brand-400: var(--brand-400);
+  --color-brand-500: var(--brand-500);
+  --color-brand-600: var(--brand-600);
+  --color-brand-700: var(--brand-700);
+  --color-brand-800: var(--brand-800);
+  --color-brand-900: var(--brand-900);
+  --color-brand-950: var(--brand-950);
+
+  /* Semantic Tokens */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-content: var(--content);
+  --color-content-muted: var(--content-muted);
   --color-accent: var(--accent);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+
+  /* Neutral Scale */
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
+  --color-neutral-950: var(--neutral-950);
+
+  /* Typography */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #121212;
-    --panel: #181818;
-    --muted: #b3b3b3;
-    --foreground: #ededed;
-    --accent: #1db954;
+body {
+  background-color: var(--bg);
+  color: var(--content);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+/* Modern Utility Classes */
+.btn {
+  @apply inline-flex items-center justify-center rounded-2xl px-6 py-3 text-sm font-medium transition-all duration-200 ease-out;
+  @apply ring-1 ring-black/5 shadow-md;
+  @apply hover:scale-[0.98] focus-visible:scale-[0.98];
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-bg;
+}
+
+.btn-primary {
+  @apply bg-accent text-white shadow-lg;
+  @apply hover:bg-brand-600 hover:shadow-xl;
+  @apply active:bg-brand-700;
+}
+
+.btn-secondary {
+  @apply bg-surface text-content border border-border;
+  @apply hover:bg-surface-hover hover:border-neutral-600;
+}
+
+.surface {
+  @apply bg-surface rounded-2xl shadow-lg ring-1 ring-black/5;
+  @apply border border-border/50;
+}
+
+.surface-card {
+  @apply surface p-6 transition-all duration-200 ease-out;
+  @apply hover:shadow-xl hover:scale-[1.02];
+}
+
+.input {
+  @apply w-full rounded-2xl px-4 py-3 bg-surface text-content placeholder-content-muted;
+  @apply border border-border ring-1 ring-black/5;
+  @apply transition-all duration-200 ease-out;
+  @apply focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20;
+  @apply hover:border-neutral-600;
+}
+
+/* Typography Classes */
+.heading-xl {
+  @apply text-4xl font-semibold tracking-tight text-balance leading-tight;
+}
+
+.heading-lg {
+  @apply text-3xl font-semibold tracking-tight text-balance leading-tight;
+}
+
+.body-text {
+  @apply leading-relaxed max-w-prose text-content-muted;
+}
+
+/* Layout Classes */
+.container-app {
+  @apply container mx-auto px-4 max-w-5xl;
+}
+
+.section-padding {
+  @apply py-12 md:py-16;
+}
+
+.card-padding {
+  @apply p-6 md:p-8;
+}
+
+/* Animation Classes */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-/* Utility classes for buttons and surfaces matching Spotify look */
-.btn {
-  @apply inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-medium transition-colors;
+.animate-fade-in {
+  animation: fade-in 200ms ease-out;
 }
-.btn-accent {
-  background: var(--accent);
-  color: #000;
+
+.animate-scale-in {
+  animation: scale-in 200ms ease-out;
 }
-.btn-accent:hover {
-  filter: brightness(1.1);
-}
-.surface {
-  background: var(--panel);
-}
-.surface-muted {
-  background: #0f0f0f;
-}
-.input {
-  @apply w-full rounded-full px-4 py-2 bg-[#222] text-[var(--foreground)] placeholder-[var(--muted)] outline-none border border-transparent focus:border-[var(--accent)];
+
+/* Motion-safe animations */
+@media (prefers-reduced-motion: no-preference) {
+  .motion-safe-animate-fade-in {
+    animation: fade-in 200ms ease-out;
+  }
+  
+  .motion-safe-animate-scale-in {
+    animation: scale-in 200ms ease-out;
+  }
+  
+  .scroll-animate {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 400ms ease-out;
+  }
+  
+  .scroll-animate.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
