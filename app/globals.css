@@ -99,67 +99,153 @@ body {
   line-height: 1.6;
 }
 
-/* Modern Utility Classes */
+/* Modern Utility Classes using standard CSS */
 .btn {
-  @apply inline-flex items-center justify-center rounded-2xl px-6 py-3 text-sm font-medium transition-all duration-200 ease-out;
-  @apply ring-1 ring-black/5 shadow-md;
-  @apply hover:scale-[0.98] focus-visible:scale-[0.98];
-  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-bg;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 200ms ease-out;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  border: 1px solid transparent;
+}
+
+.btn:hover {
+  transform: scale(0.98);
+}
+
+.btn:focus-visible {
+  outline: none;
+  transform: scale(0.98);
+  box-shadow: 0 0 0 2px var(--brand-500);
 }
 
 .btn-primary {
-  @apply bg-accent text-white shadow-lg;
-  @apply hover:bg-brand-600 hover:shadow-xl;
-  @apply active:bg-brand-700;
+  background-color: var(--accent);
+  color: white;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.btn-primary:hover {
+  background-color: var(--brand-600);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+.btn-primary:active {
+  background-color: var(--brand-700);
 }
 
 .btn-secondary {
-  @apply bg-surface text-content border border-border;
-  @apply hover:bg-surface-hover hover:border-neutral-600;
+  background-color: var(--surface);
+  color: var(--content);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background-color: var(--surface-hover);
+  border-color: var(--neutral-600);
 }
 
 .surface {
-  @apply bg-surface rounded-2xl shadow-lg ring-1 ring-black/5;
-  @apply border border-border/50;
+  background-color: var(--surface);
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  border: 1px solid var(--border);
 }
 
 .surface-card {
-  @apply surface p-6 transition-all duration-200 ease-out;
-  @apply hover:shadow-xl hover:scale-[1.02];
+  background-color: var(--surface);
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  transition: all 200ms ease-out;
+}
+
+.surface-card:hover {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  transform: scale(1.02);
 }
 
 .input {
-  @apply w-full rounded-2xl px-4 py-3 bg-surface text-content placeholder-content-muted;
-  @apply border border-border ring-1 ring-black/5;
-  @apply transition-all duration-200 ease-out;
-  @apply focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20;
-  @apply hover:border-neutral-600;
+  width: 100%;
+  border-radius: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--surface);
+  color: var(--content);
+  border: 1px solid var(--border);
+  transition: all 200ms ease-out;
+}
+
+.input::placeholder {
+  color: var(--content-muted);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--brand-500);
+  box-shadow: 0 0 0 3px rgb(29 185 84 / 0.2);
+}
+
+.input:hover {
+  border-color: var(--neutral-600);
 }
 
 /* Typography Classes */
 .heading-xl {
-  @apply text-4xl font-semibold tracking-tight text-balance leading-tight;
+  font-size: 2.25rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  text-wrap: balance;
 }
 
 .heading-lg {
-  @apply text-3xl font-semibold tracking-tight text-balance leading-tight;
+  font-size: 1.875rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  text-wrap: balance;
 }
 
 .body-text {
-  @apply leading-relaxed max-w-prose text-content-muted;
+  line-height: 1.625;
+  max-width: 65ch;
+  color: var(--content-muted);
 }
 
 /* Layout Classes */
 .container-app {
-  @apply container mx-auto px-4 max-w-5xl;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  max-width: 80rem;
 }
 
 .section-padding {
-  @apply py-12 md:py-16;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
 }
 
 .card-padding {
-  @apply p-6 md:p-8;
+  padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .card-padding {
+    padding: 2rem;
+  }
 }
 
 /* Animation Classes */
@@ -214,3 +300,5 @@ body {
     transform: translateY(0);
   }
 }
+
+

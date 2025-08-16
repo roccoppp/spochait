@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-bg flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--bg)' }}>
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-center justify-center section-padding">
         <div className="container-app">
@@ -27,7 +27,7 @@ export default function LandingPage() {
 
             {/* Title Section */}
             <div className="motion-safe-animate-fade-in space-y-4">
-              <h1 className="heading-xl text-content">
+              <h1 className="heading-xl" style={{ color: 'var(--content)' }}>
                 Spotichat
               </h1>
               
@@ -40,7 +40,8 @@ export default function LandingPage() {
             <div className="motion-safe-animate-scale-in">
               <button
                 onClick={() => signIn("spotify")}
-                className="btn btn-primary text-lg px-8 py-4 group"
+                className="btn btn-primary text-lg group"
+                style={{ padding: '1rem 2rem' }}
               >
                 <svg
                   className="w-5 h-5 mr-3 transition-transform duration-200 group-hover:scale-110"
@@ -52,7 +53,7 @@ export default function LandingPage() {
                 Connect to Spotify
               </button>
               
-              <p className="text-sm text-content-muted mt-4">
+              <p className="text-sm mt-4" style={{ color: 'var(--content-muted)' }}>
                 Secure OAuth authentication • No data stored
               </p>
             </div>
@@ -62,9 +63,9 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border py-6">
+      <footer className="py-6" style={{ borderTop: '1px solid var(--border)' }}>
         <div className="container-app">
-          <p className="text-sm text-content-muted text-center">
+          <p className="text-sm text-center" style={{ color: 'var(--content-muted)' }}>
             Built with Next.js and AI SDK
           </p>
         </div>

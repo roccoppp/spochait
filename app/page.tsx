@@ -44,11 +44,11 @@ export default function SpotichatPage() {
   // Show loading while checking authentication
   if (authStatus === "loading") {
     return (
-      <div className="min-h-screen bg-bg flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg)' }}>
         <div className="surface-card">
           <div className="flex items-center space-x-3">
-            <div className="w-6 h-6 border-2 border-brand-500 border-t-transparent rounded-full animate-spin"></div>
-            <span className="text-content">Loading...</span>
+            <div className="w-6 h-6 rounded-full animate-spin" style={{ border: '2px solid var(--brand-500)', borderTopColor: 'transparent' }}></div>
+            <span style={{ color: 'var(--content)' }}>Loading...</span>
           </div>
         </div>
       </div>
@@ -62,17 +62,17 @@ export default function SpotichatPage() {
 
   // Show chat page if authenticated
   return (
-    <div className="min-h-screen bg-bg flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ backgroundColor: 'var(--bg)' }}>
       {/* Navbar */}
-      <header className="sticky top-0 z-50 border-b border-border bg-surface/80 backdrop-blur-lg">
+      <header className="sticky top-0 z-50 backdrop-blur-lg" style={{ borderBottom: '1px solid var(--border)', backgroundColor: 'var(--surface)', opacity: '0.8' }}>
         <div className="container-app">
           <div className="h-16 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-accent shadow-lg ring-2 ring-accent/20" />
-              <span className="heading-lg text-content">Spotichat</span>
+              <div className="w-8 h-8 rounded-full shadow-lg" style={{ backgroundColor: 'var(--accent)', boxShadow: `0 0 0 2px var(--accent)`, opacity: '0.2' }} />
+              <span className="heading-lg" style={{ color: 'var(--content)' }}>Spotichat</span>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-sm text-content-muted hidden md:block">
+              <span className="text-sm hidden md:block" style={{ color: 'var(--content-muted)' }}>
                 {session?.user?.email}
               </span>
               <button 
@@ -93,7 +93,7 @@ export default function SpotichatPage() {
             
             {/* Header */}
             <div className="motion-safe-animate-fade-in">
-              <h1 className="heading-lg text-content mb-2">Chat about your music</h1>
+              <h1 className="heading-lg mb-2" style={{ color: 'var(--content)' }}>Chat about your music</h1>
               <p className="body-text">Ask anything about tracks, playlists, and artists.</p>
             </div>
 
@@ -106,12 +106,12 @@ export default function SpotichatPage() {
                   {messages.length === 0 ? (
                     <div className="h-full grid place-items-center text-center">
                       <div className="space-y-4">
-                        <div className="w-16 h-16 bg-surface-hover rounded-2xl mx-auto flex items-center justify-center">
-                          <svg className="w-8 h-8 text-content-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <div className="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center" style={{ backgroundColor: 'var(--surface-hover)' }}>
+                          <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ color: 'var(--content-muted)' }}>
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                           </svg>
                         </div>
-                        <p className="text-content-muted">Say hi to start chatting about your music.</p>
+                        <p style={{ color: 'var(--content-muted)' }}>Say hi to start chatting about your music.</p>
                       </div>
                     </div>
                   ) : (
@@ -122,11 +122,11 @@ export default function SpotichatPage() {
                         style={{ animationDelay: `${index * 50}ms` }}
                       >
                         <div
-                          className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-                            m.role === "user" 
-                              ? "bg-accent text-white" 
-                              : "bg-surface-hover text-content-muted"
-                          }`}
+                          className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center"
+                          style={m.role === "user" 
+                            ? { backgroundColor: 'var(--accent)', color: 'white' } 
+                            : { backgroundColor: 'var(--surface-hover)', color: 'var(--content-muted)' }
+                          }
                         >
                           {m.role === "user" ? (
                             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -139,10 +139,10 @@ export default function SpotichatPage() {
                           )}
                         </div>
                         <div className="flex-1 space-y-2">
-                          <div className="text-xs font-medium uppercase tracking-wider text-content-muted">
+                          <div className="text-xs font-medium uppercase tracking-wider" style={{ color: 'var(--content-muted)' }}>
                             {m.role === "user" ? "You" : "Assistant"}
                           </div>
-                          <div className="text-content leading-relaxed">
+                          <div className="leading-relaxed" style={{ color: 'var(--content)' }}>
                             {m.parts?.map((part, idx) => (
                               part.type === "text" ? <span key={idx}>{part.text}</span> : null
                             ))}
@@ -192,9 +192,9 @@ export default function SpotichatPage() {
         </div>
       </main>
       {/* Footer */}
-      <footer className="border-t border-border py-6">
+      <footer className="py-6" style={{ borderTop: '1px solid var(--border)' }}>
         <div className="container-app">
-          <p className="text-sm text-content-muted text-center">
+          <p className="text-sm text-center" style={{ color: 'var(--content-muted)' }}>
             Built with Next.js and AI SDK
           </p>
         </div>
