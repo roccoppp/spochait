@@ -43,7 +43,7 @@ export async function processQuery(
 
   // Stream immediately; avoid awaiting intermediate results to prevent route timeouts
   return streamText({
-    model: openai('gpt-5'),
+    model: openai('gpt-4o'),
     system: `You are a specialized Spotify music assistant. Your ONLY purpose is to help users with:
 
 1. **Songs**: Finding, searching, and getting information about specific tracks
