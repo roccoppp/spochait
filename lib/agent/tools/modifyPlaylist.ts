@@ -11,7 +11,7 @@ type GetAccessToken = () => Promise<string | undefined> | string | undefined;
 export function modifyPlaylist(getAccessToken: GetAccessToken) {
   return tool({
     description:
-      'Add and/or remove tracks from a Spotify playlist using track IDs. Provide the playlistId and arrays of track IDs to add/remove. The track ids and playlist id are needed to modify the playlist.',
+      'Add and/or remove tracks from a Spotify playlist using track IDs. This tool supports BATCH operations - you can add/remove multiple tracks in a single call by providing arrays of track IDs. Always batch multiple operations together for efficiency. Provide the playlistId and arrays of track IDs to add/remove.',
     inputSchema: z
       .object({
         playlistId: z
@@ -20,12 +20,12 @@ export function modifyPlaylist(getAccessToken: GetAccessToken) {
           .describe('The Spotify playlist ID to modify.'),
         addTrackIds: z
           .array(z.string().min(1))
-          .describe('Track IDs to add to the playlist.')
+          .describe('Array of track IDs to add to the playlist. Can include multiple tracks for batch adding.')
           .default([])
           .optional(),
         removeTrackIds: z
           .array(z.string().min(1))
-          .describe('Track IDs to remove from the playlist.')
+          .describe('Array of track IDs to remove from the playlist. Can include multiple tracks for batch removal.')
           .default([])
           .optional(),
       })
