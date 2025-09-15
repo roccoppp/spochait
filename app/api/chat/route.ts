@@ -30,7 +30,7 @@ export async function POST(req: Request) {
   
   console.log('🎵 [CHAT ROUTE] Converted to model messages:', {
     modelMessageCount: modelMessages.length,
-    hasAccessToken: !!(session as any)?.accessToken
+    hasAccessToken: !!(session as unknown as { accessToken?: string } | null)?.accessToken
   });
   
   // If this is a fresh session with sessionId, we can ensure clean state
