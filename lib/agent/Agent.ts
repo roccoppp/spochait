@@ -36,12 +36,20 @@ export async function processQuery(
   getAccessToken: () => Promise<string | undefined> | string | undefined = () => undefined,
   sessionId?: string,
 ) {
+  console.log('🤖 [AGENT] Processing query with messages:', {
+    messageCount: messages.length,
+    sessionId,
+    lastMessage: messages[messages.length - 1]?.content
+  });
+
   const tools = {
     listPlaylists: listPlaylists(getAccessToken),
     modifyPlaylist: modifyPlaylist(getAccessToken),
     searchTracks: searchTracks(getAccessToken),
     getPlaylistTracks: getPlaylistTracks(getAccessToken),
   } as const;
+
+  console.log('🤖 [AGENT] Available tools:', Object.keys(tools));
 
   // Stream immediately; avoid awaiting intermediate results to prevent route timeouts
   return streamText({
@@ -82,6 +90,15 @@ Your responses may be passed to another LLM call if you only return tool calls.`
     tools,
     // Enable multi-step tool calls and follow-up assistant text in a single stream
     stopWhen: stepCountIs(300),
+    onStepFinish: (step) => {
+      console.log('🤖 [AGENT] Step finished:', {
+        hasToolCalls: !!step.toolCalls?.length,
+        toolCallCount: step.toolCalls?.length || 0,
+        toolNames: step.toolCalls?.map(tc => tc.toolName) || [],
+        textLength: step.text?.length || 0,
+        textPreview: step.text?.slice(0, 100) + (step.text && step.text.length > 100 ? '...' : '')
+      });
+    },
   });
 }
 

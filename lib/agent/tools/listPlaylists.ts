@@ -35,19 +35,28 @@ export function listPlaylists(getAccessToken: GetAccessToken) {
       })
       .describe('Optional pagination parameters.'),
     execute: async ({ limit = 20, offset = 0 }) => {
+      console.log('🔧 [TOOL] listPlaylists called with:', { limit, offset });
+      
       const token = await Promise.resolve(
         typeof getAccessToken === 'function' ? getAccessToken() : undefined,
       );
 
       if (!token) {
+        console.log('❌ [TOOL] listPlaylists failed: Missing access token');
         throw new Error('Missing Spotify access token. Please authenticate.');
       }
 
       const spotifyApi = new SpotifyWebApi();
       spotifyApi.setAccessToken(token);
 
+      console.log('🔧 [TOOL] listPlaylists calling Spotify API...');
       const response = await spotifyApi.getUserPlaylists({ limit, offset });
       const items = (response.body?.items ?? []) as SpotifyApi.PlaylistObjectSimplified[];
+
+      console.log('✅ [TOOL] listPlaylists success:', { 
+        totalPlaylists: items.length,
+        playlistNames: items.map(p => p.name)
+      });
 
       return items.map((p) => ({ id: p.id, name: p.name }));
     },
