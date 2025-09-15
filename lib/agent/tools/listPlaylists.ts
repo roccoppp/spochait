@@ -10,7 +10,11 @@ type GetAccessToken = () => Promise<string | undefined> | string | undefined;
  */
 export function listPlaylists(getAccessToken: GetAccessToken) {
   return tool({
-    description: 'List the current user\'s Spotify playlists (id and name).',
+    description: `List the current user's Spotify playlists (id and name). 
+    Use this tool to discover available playlists before using other playlist tools. 
+    The limit parameter controls how many playlists to return (1-50, default 20). 
+    If you need to see more playlists beyond the limit, use the offset parameter to paginate through results 
+    - increase offset by the limit value to get the next batch (e.g., first call: limit=20 offset=0, second call: limit=20 offset=20).`,
     inputSchema: z
       .object({
         limit: z
