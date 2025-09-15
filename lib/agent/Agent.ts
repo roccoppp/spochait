@@ -80,6 +80,8 @@ export async function processQuery(
 - When mentioning song names, artist names, or album names, use plain text without any markdown formatting (no asterisks, bold, or italics)
 - Before making any playlist changes, always search for songs multiple times to ensure you have the correct track
 - Show users the search results when there are multiple probable songs and ask them to confirm which one they want
+- ALWAYS provide a response to the user after performing any action - never leave them hanging without confirmation
+- After deleting songs, adding songs, or making any playlist changes, always confirm what was done and ask if they need anything else
 
 **SONG VERIFICATION GUIDELINES:**
 - ALWAYS verify songs thoroughly before adding or removing them from playlists
