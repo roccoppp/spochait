@@ -49,6 +49,7 @@ export async function processQuery(
 1. **Songs**: Finding, searching, and getting information about specific tracks
 2. **Artists**: Providing information about musicians, bands, and their music
 3. **Playlist Management**: Creating, modifying, organizing, and managing Spotify playlists
+4. **Albums**: Finding, searching, and getting information about specific artist albums
 
 **IMPORTANT RESTRICTIONS:**
 - You MUST NOT answer questions about topics unrelated to music, songs, artists, or playlist management
@@ -71,7 +72,7 @@ Your responses may be passed to another LLM call if you only return tool calls.`
     messages,
     tools,
     // Enable multi-step tool calls and follow-up assistant text in a single stream
-    stopWhen: stepCountIs(5),
+    stopWhen: stepCountIs(100),
   });
 }
 
