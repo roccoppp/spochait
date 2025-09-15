@@ -78,6 +78,17 @@ export async function processQuery(
 - Use the available tools to search tracks, list playlists, list the songs of a playlist, and modify playlists when needed
 - Decide if you need to use tools to get more information (e.g., Playlist ID or track IDs) or if you can respond with the information you have
 - When mentioning song names, artist names, or album names, use plain text without any markdown formatting (no asterisks, bold, or italics)
+- Before making any playlist changes, always search for songs multiple times to ensure you have the correct track
+- Show users the search results when there are multiple probable songs and ask them to confirm which one they want
+
+**SONG VERIFICATION GUIDELINES:**
+- ALWAYS verify songs thoroughly before adding or removing them from playlists
+- Use the searchTracks tool MULTIPLE times with different search queries to find the exact right song
+- Search by: 1) Song title + artist, 2) Just song title, 3) Artist + partial title if needed
+- Compare search results carefully - check artist names, album names, and song titles for exact matches
+- If multiple similar songs exist, ask the user to clarify which specific version they want
+- NEVER add or remove songs without being 100% certain you have the correct track ID
+- When in doubt, show the user the search results and let them choose
 
 **EFFICIENCY GUIDELINES:**
 - When modifying playlists, ALWAYS batch multiple operations together in a single tool call
