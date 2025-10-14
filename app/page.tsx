@@ -28,10 +28,7 @@ export default function SpotichatPage() {
     }),
   });
 
-  // Clear messages on component mount to ensure fresh session
-  useEffect(() => {
-    setMessages([]);
-  }, [setMessages]);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
