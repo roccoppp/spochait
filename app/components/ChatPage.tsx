@@ -1,9 +1,9 @@
 import React from "react";
+import { Session } from "next-auth";
 
-
-export default function ChatPage({session}){
+export default function ChatPage({session}: {session: Session}){
 
     return(
-        <div>{session.name}</div>
+        <div>{session.user?.name}</div>
     )
 }
