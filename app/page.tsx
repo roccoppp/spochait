@@ -4,7 +4,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import Image from "next/image";
-import LandingPage from "./components/LandingPage";
+import { LandingPage, LoadingPage } from "./components";
 
 export default function SpotichatPage() {
   const { data: session, status: authStatus } = useSession();
@@ -28,8 +28,6 @@ export default function SpotichatPage() {
     }),
   });
 
-
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = input.trim();
@@ -41,16 +39,7 @@ export default function SpotichatPage() {
 
   // Show loading while checking authentication
   if (authStatus === "loading") {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: 'var(--bg)' }}>
-        <div className="surface-card">
-          <div className="flex items-center space-x-3">
-            <div className="w-6 h-6 rounded-full animate-spin" style={{ border: '2px solid var(--brand-500)', borderTopColor: 'transparent' }}></div>
-            <span style={{ color: 'var(--content)' }}>Loading...</span>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingPage />;
   }
 
   // Show landing page if not authenticated
@@ -213,14 +202,7 @@ export default function SpotichatPage() {
           </div>
         </div>
       </main>
-      {/* Footer */}
-      <footer className="py-6" style={{ borderTop: '1px solid var(--border)' }}>
-        <div className="container-app">
-          <p className="text-sm text-center" style={{ color: 'var(--content-muted)' }}>
-            Built with Next.js and AI SDK
-          </p>
-        </div>
-      </footer>
+
     </div>
   );
 }
